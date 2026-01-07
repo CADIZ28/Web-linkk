@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.card {
+  background: white;
+  padding: 28px 24px;
+  border-radius: 22px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  animation: pop 0.6s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+h2 {
+  margin: 0;
+  color: #334155;
+}
+
+p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+#status {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #475569;
+}
+
+button {
+  margin-top: 14px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#btn {
+  cursor: not-allowed;
+  background: #e5e7eb;
+  color: #9ca3af;
+}
+
+#btn.active {
+  background: linear-gradient(135deg, #60a5fa, #818cf8);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(99,102,241,0.4);
+}
+
+#btn.active:hover {
+  transform: translateY(-2px);
+}
+
+#retry {
+  display: none;
+  background: #f1f5f9;
+  color: #475569;
+  cursor: pointer;
+}
+
+#retry:hover {
+  background: #e2e8f0;
+}
+
+.icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="icon">📍</div>
+  <h2>Selamat Datang</h2>
+  <p id="info">Mohon izinkan akses lokasi</p>
+  <div id="status">Menunggu izin lokasi…</div>
+
+  <button id="btn" disabled>Masuk ke Portofolio</button>
+  <button id="retry">Coba Lagi</button>
+</div>
+
+<script>
+const PORTFOLIO_LINK = "https://cadiz28.github.io/Portfolio/"; // ganti sesuai link kamu
+
+const btn = document.getElementById("btn");
+const retry = document.getElementById("retry");
+const info = document.getElementById("info");
+const statusText = document.getElementById("status");
+
+btn.addEventListener("click", () => {
+  if (!btn.disabled) {
+    window.location.href = PORTFOLIO_LINK;
+  }
+});
+
+retry.addEventListener("click", () => {
+  statusText.innerText = "Mencoba ulang izin lokasi…";
+  retry.style.display = "none";
+  cekLokasi();
+});
+
+function aktifkanTombol() {
+  btn.disabled = false;
+  btn.classList.add("active");
+  statusText.innerText = "Lokasi berhasil diverifikasi ✨";
+  retry.style.display = "none";
+}
+
+function gagalLokasi() {
+  info.innerText = "Akses lokasi diperlukan";
+  statusText.innerText = "Aktifkan lokasi untuk melanjutkan";
+  retry.style.display = "block";
+}
+
+function cekLokasi() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      () => aktifkanTombol(),
+      () => gagalLokasi()
+    );
+  } else {
+    gagalLokasi();
+  }
+}
+
+cekLokasi();
+</script>
+
+</body>
+</html>
